@@ -1,0 +1,32 @@
+name: Recolector de Noticias Automático
+
+on:
+  schedule:
+    # Se ejecuta a las 8:00 UTC todos los días (aprox. 4:00 AM en Chile)
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Esto añade un botón para ejecutarlo manualmente
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout del código
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 3. Instalar las dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps
+
+      - name: 4. Ejecutar el Recolector de Noticias
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: python news_collector.py

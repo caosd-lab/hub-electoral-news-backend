@@ -1,0 +1,10 @@
+flask
+flask-cors
+supabase
+python-dotenv
+langchain
+langchain-community
+langchain-google-genai
+gunicorn
+faiss-cpu
+sentence-transformers
